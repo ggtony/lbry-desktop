@@ -61,11 +61,6 @@
   }
 }
 
-.claim-list__header-action-text {
-  @extend .help;
-  align-self: flex-end;
-}
-
 .claim-preview__wrapper {
   padding: var(--spacing-m);
   list-style: none;
@@ -133,13 +128,14 @@
 
 .claim-preview--large {
   border: none;
-
   min-height: 8rem;
-  @media (max-width: $breakpoint-small) {
-    min-height: 4rem;
-  }
+
   &:hover {
     background-color: transparent;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    min-height: 4rem;
   }
 
   .media__thumb {
@@ -223,6 +219,9 @@
 
 .claim-preview__custom-properties {
   text-align: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .claim-preview-metadata {

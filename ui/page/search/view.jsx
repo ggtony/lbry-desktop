@@ -98,7 +98,6 @@ export default function SearchPage(props: Props) {
         {urlQuery && (
           <>
             {isValid && <SearchTopClaim query={modifiedUrlQuery} />}
-
             <ClaimList
               uris={uris}
               loading={isSearching}
@@ -126,7 +125,6 @@ export default function SearchPage(props: Props) {
 
             <div className="main--empty help">{__('These search results are provided by LBRY, Inc.')}</div>
           </>
-        )}
         )}
       </section>
     </Page>

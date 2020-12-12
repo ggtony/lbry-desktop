@@ -8,7 +8,7 @@ import {
   buildURI,
   SETTINGS,
   isClaimNsfw,
-  makeSelectPendingClaimUrlForName
+  makeSelectPendingClaimForUri,
 } from 'lbry-redux';
 import { createSelector } from 'reselect';
 
@@ -87,7 +87,6 @@ export const makeSelectRecommendedContentForUri = (uri: string) =>
           recommendedContent = searchUris;
         }
       }
-
       return recommendedContent;
     }
   );
@@ -105,15 +104,14 @@ export const makeSelectWinningUriForQuery = (query: string) => {
 
   return createSelector(
     makeSelectClientSetting(SETTINGS.SHOW_MATURE),
-    makeSelectPendingClaimUrlForName(query),
+    makeSelectPendingClaimForUri(uriFromQuery),
     makeSelectClaimForUri(uriFromQuery),
     makeSelectClaimForUri(channelUriFromQuery),
-    (matureEnabled, pendingClaimUrl, claim1, claim2) => {
+    (matureEnabled, pendingClaim, claim1, claim2) => {
       const claim1Mature = claim1 && isClaimNsfw(claim1);
       const claim2Mature = claim2 && isClaimNsfw(claim2);
-      if (pendingClaimUrl) {
-        return pendingClaimUrl;
-      }
+      let pendingAmount = pendingClaim && pendingClaim.amount;
+
       if (!claim1 && !claim2) {
         return undefined;
       } else if (!claim1 && claim2) {
@@ -135,7 +133,13 @@ export const makeSelectWinningUriForQuery = (query: string) => {
         }
       }
 
-      return Number(effectiveAmount1) > Number(effectiveAmount2) ? claim1.canonical_url : claim2.canonical_url;
+      const returnBeforePending =
+        Number(effectiveAmount1) > Number(effectiveAmount2) ? claim1.canonical_url : claim2.canonical_url;
+      if (pendingAmount && pendingAmount > effectiveAmount1 && pendingAmount > effectiveAmount2) {
+        return pendingAmount.permanent_url;
+      } else {
+        return returnBeforePending;
+      }
     }
   );
 };

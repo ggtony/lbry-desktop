@@ -29,6 +29,16 @@
   }
 }
 
+.yrbl--small {
+  display: none;
+
+  @media (min-width: $breakpoint-small) {
+    display: block;
+    height: 12rem;
+    margin-right: calc(var(--spacing-xl));
+  }
+}
+
 .yrbl__content {
   max-width: 400px;
 }

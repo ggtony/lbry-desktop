@@ -10,11 +10,11 @@ import SelectChannel from 'component/selectChannel';
 import { FormField } from 'component/common/form';
 import { parseURI, isNameValid, creditsToString } from 'lbry-redux';
 import usePersistedState from 'effects/use-persisted-state';
-import I18nMessage from 'component/i18nMessage';
 import analytics from 'analytics';
 import LbcSymbol from 'component/common/lbc-symbol';
 import ClaimPreview from 'component/claimPreview';
-import { SITE_NAME } from 'config';
+import { URL } from 'config';
+import HelpLink from 'component/common/help-link';
 
 type Props = {
   doToast: ({ message: string }) => void,
@@ -76,7 +76,6 @@ function RepostCreate(props: Props) {
 
   const [available, setAvailable] = React.useState(true);
   const { replace, goBack } = useHistory();
-  console.log('isR', isResolvingEnteredRepost, isResolvingPassedRepost);
   const resolvingRepost = isResolvingEnteredRepost || isResolvingPassedRepost;
 
   let repostBidError;
@@ -185,7 +184,6 @@ function RepostCreate(props: Props) {
 
   return (
     <>
-      <span className="claim-list__header-action-text">Repost content and channels to help people discover them</span>
       <Card
         actions={
           <div>
@@ -194,14 +192,12 @@ function RepostCreate(props: Props) {
                 <FormField
                   label={'Content to repost'}
                   type="text"
-                  name="repost_url"
+                  name="content_url"
                   value={enteredContentUri}
                   error={false}
                   onChange={event => setEnteredContentUri(event.target.value)}
+                  placeholder={__('Enter a name or %domain% URL', { domain: URL })}
                 />
-                <div className="form-field__help">{`Enter a name or copy and paste a ${
-                  SITE_NAME === 'lbry.tv' ? SITE_NAME : `LBRY or ${SITE_NAME}`
-                } URL`}</div>
               </>
             )}
             <fieldset-section>
@@ -223,7 +219,10 @@ function RepostCreate(props: Props) {
               <fieldset-section>
                 <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
                   <fieldset-section>
-                    <label>{__('Repost url')}</label>
+                    <label>
+                      {__('Repost URL')}
+                      <HelpLink href="https://lbry.com/faq/naming" />
+                    </label>
                     <div className="form-field__prefix">{repostUrlName}</div>
                   </fieldset-section>
                   <FormField
@@ -232,24 +231,12 @@ function RepostCreate(props: Props) {
                     value={enteredRepostName}
                     error={repostNameError}
                     onChange={event => setEnteredRepostName(event.target.value)}
+                    placeholder={__('Do a thing')}
                   />
                 </fieldset-group>
               </fieldset-section>
-              <div className="form-field__help">
-                <I18nMessage
-                  tokens={{
-                    lbry_naming_link: (
-                      <Button button="link" label={__('community name')} href="https://lbry.com/faq/naming" />
-                    ),
-                  }}
-                >
-                  Change this to repost to a different %lbry_naming_link%.
-                </I18nMessage>
-              </div>
-
               <SelectChannel
                 label={__('Channel to repost on')}
-                // hideAnon
                 hideNew
                 channel={repostChannel}
                 onChannelChange={newChannel => setRepostChannel(newChannel)}
@@ -262,7 +249,7 @@ function RepostCreate(props: Props) {
                 step="any"
                 placeholder="0.123"
                 className="form-field--price-amount"
-                label={<LbcSymbol postfix={__('Stake')} size={14} />}
+                label={<LbcSymbol postfix={__('Support')} size={14} />}
                 value={repostBid}
                 error={repostBidError}
                 helper={__('Bid more than %amount% Credits to take over.', {

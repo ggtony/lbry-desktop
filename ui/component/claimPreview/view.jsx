@@ -228,7 +228,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       })}
     >
       <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
-        <div className={'claim-preview__null-label'}>{__('There is nothing at this location')}</div>
+        <div className={'claim-preview__null-label empty'}>{__('* space crickets *')}</div>
       </div>
     </li>
   );
@@ -244,7 +244,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
         <div className="media__thumb" />
 
-        <div className="blank claim-preview__null-label">{__('Mature content hidden by your preferences')}</div>
+        <div className="section__subtitle">{__('Mature content hidden by your preferences')}</div>
       </div>
     </li>
   );

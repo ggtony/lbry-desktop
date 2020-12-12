@@ -10,6 +10,7 @@ type Props = {
   type: string,
   className?: string,
   actions?: Node,
+  small: boolean,
 };
 
 const yrblTypes = {
@@ -23,13 +24,13 @@ export default class extends React.PureComponent<Props> {
   };
 
   render() {
-    const { title, subtitle, type, className, actions } = this.props;
+    const { title, subtitle, type, className, actions, small } = this.props;
 
     const image = yrblTypes[type];
 
     return (
       <div className="yrbl__wrap">
-        <img alt="Friendly gerbil" className={classnames('yrbl', className)} src={`${image}`} />
+        <img alt="Friendly gerbil" className={classnames(small ? 'yrbl--small' : 'yrbl', className)} src={`${image}`} />
         <div>
           {(title || subtitle) && (
             <div className="yrbl__content">

@@ -7,6 +7,7 @@ import classnames from 'classnames';
 import CommentView from 'component/comment';
 import Spinner from 'component/spinner';
 import Button from 'component/button';
+import Yrbl from 'component/yrbl';
 import Card from 'component/common/card';
 import CommentCreate from 'component/commentCreate';
 import usePersistedState from 'effects/use-persisted-state';
@@ -210,7 +211,16 @@ function CommentList(props: Props) {
         <>
           <CommentCreate uri={uri} />
 
-          {!isFetchingComments && hasNoComments && <div className="main--empty">{__('Be the first to comment!')}</div>}
+          {!isFetchingComments && hasNoComments && (
+            <div className="empty main-empty">
+              <Yrbl
+                type="happy"
+                title={__('First!')}
+                small
+                subtitle={__('Be the first to say something insightful.')}
+              />
+            </div>
+          )}
 
           <ul className="comments" ref={commentRef}>
             {comments &&

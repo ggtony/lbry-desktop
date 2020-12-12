@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { doResolveUris, doClearPublish, doPrepareEdit, selectPendingIds } from 'lbry-redux';
-//
 import { makeSelectWinningUriForQuery } from 'redux/selectors/search';
 import SearchTopClaim from './view';
 import { push } from 'connected-react-router';
@@ -12,7 +11,6 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  // eslint-disable-next-line no-undef
   beginPublish: name => {
     dispatch(doClearPublish());
     dispatch(doPrepareEdit({ name }));

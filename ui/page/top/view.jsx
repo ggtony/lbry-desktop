@@ -18,7 +18,7 @@ type Props = {
 function TopPage(props: Props) {
   const { name, beginPublish } = props;
   const [channelActive, setChannelActive] = React.useState(false);
-
+  // if the query was actually '@name', still offer repost for 'name'
   const queryName = name[0] === '@' ? name.slice(1) : name;
   return (
     <Page>
@@ -27,6 +27,22 @@ function TopPage(props: Props) {
         name={channelActive ? `@${queryName}` : queryName}
         defaultFreshness={FRESH_ALL}
         defaultOrderBy={ORDER_BY_TOP}
+        meta={
+          <I18nMessage
+            tokens={{
+              repost: (
+                <Button
+                  button="secondary"
+                  navigate={`/$/${PAGES.REPOST_NEW}?to=${queryName}`}
+                  label={__('Repost Here')}
+                />
+              ),
+              publish: <Button button="secondary" onClick={() => beginPublish(queryName)} label={'Publish Here'} />,
+            }}
+          >
+            %repost% %publish%
+          </I18nMessage>
+        }
         includeSupportAction
         renderProperties={claim => (
           <span className="claim-preview__custom-properties">
@@ -35,38 +51,23 @@ function TopPage(props: Props) {
           </span>
         )}
         header={
-          <div className="claim-search__menu-group--between">
-            <div className="claim-search__menu-group">
-              <Button
-                label={queryName}
-                button="alt"
-                onClick={() => setChannelActive(false)}
-                className={classnames('button-toggle', {
-                  'button-toggle--active': !channelActive,
-                })}
-              />
-              <Button
-                label={`@${queryName}`}
-                button="alt"
-                onClick={() => setChannelActive(true)}
-                className={classnames('button-toggle', {
-                  'button-toggle--active': channelActive,
-                })}
-              />
-            </div>
-            <div className="claim-list__header-action-text">
-              <I18nMessage
-                tokens={{
-                  repost: (
-                    <Button button="link" navigate={`/$/${PAGES.REPOST_NEW}?rto=${queryName}`} label={__('Repost')} />
-                  ),
-                  publish: <Button button="link" onClick={() => beginPublish(queryName)} label={'publish'} />,
-                  name: <strong>{`${queryName}`}</strong>,
-                }}
-              >
-                Take over! %repost% or %publish% what you want at %name%
-              </I18nMessage>
-            </div>
+          <div className="claim-search__menu-group">
+            <Button
+              label={queryName}
+              button="alt"
+              onClick={() => setChannelActive(false)}
+              className={classnames('button-toggle', {
+                'button-toggle--active': !channelActive,
+              })}
+            />
+            <Button
+              label={`@${queryName}`}
+              button="alt"
+              onClick={() => setChannelActive(true)}
+              className={classnames('button-toggle', {
+                'button-toggle--active': channelActive,
+              })}
+            />
           </div>
         }
       />

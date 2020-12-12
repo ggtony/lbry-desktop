@@ -15,7 +15,6 @@ const select = (state, props) => {
 };
 
 const perform = dispatch => ({
-  // eslint-disable-next-line no-undef
   beginPublish: name => {
     dispatch(doClearPublish());
     dispatch(doPrepareEdit({ name }));

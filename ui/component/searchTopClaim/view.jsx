@@ -10,6 +10,7 @@ import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
 import LbcSymbol from 'component/common/lbc-symbol';
 import { DOMAIN } from 'config';
+import Yrbl from 'component/yrbl';
 
 type Props = {
   query: string,
@@ -22,16 +23,15 @@ type Props = {
 };
 
 export default function SearchTopClaim(props: Props) {
-  const { doResolveUris, query = '', winningUri, hideLink = false, setChannelActive, beginPublish, pendingIds  } = props;
+  const { doResolveUris, query = '', winningUri, hideLink = false, setChannelActive, beginPublish, pendingIds } = props;
   // without pulling in pendingIds, it doesn't update the search component...
   const uriFromQuery = `lbry://${query}`;
-  const queryName = query[0] === '@' ? query.slice(1) : query;
   const { push } = useHistory();
   let name;
   let channelUriFromQuery;
   let winningUriIsChannel;
   try {
-    const { isChannel, streamName, channelName  } = parseURI(uriFromQuery);
+    const { isChannel, streamName, channelName } = parseURI(uriFromQuery);
     const { isChannel: winnerIsChannel } = parseURI(winningUri);
     winningUriIsChannel = winnerIsChannel;
     if (!isChannel) {
@@ -67,7 +67,7 @@ export default function SearchTopClaim(props: Props) {
         {winningUri && (
           <div className="claim-preview__actions--header">
             <a
-              className="help"
+              className="media__uri"
               href="https://lbry.com/faq/trending"
               title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
             >
@@ -97,22 +97,29 @@ export default function SearchTopClaim(props: Props) {
           </div>
         )}
         {!winningUri && uriFromQuery && (
-          <div className={'empty empty--centered'}>
-            <I18nMessage
-              tokens={{
-                repost: (
-                  <Button
-                    button="link"
-                    onClick={() => push(`/$/${PAGES.REPOST_NEW}?rto=${name}`)}
-                    label={__('repost')}
-                  />
-                ),
-                publish: <Button button="link" onClick={() => beginPublish(name)} label={'publish'} />,
-                name: <strong>name</strong>,
-              }}
-            >
-              What should be here? You can %repost% or %publish% to %name%.
-            </I18nMessage>
+          <div className="empty empty--centered">
+            <Yrbl
+              type="happy"
+              title={__('Whoa!')}
+              small
+              subtitle={
+                <I18nMessage
+                  tokens={{
+                    repost: (
+                      <Button
+                        button="link"
+                        onClick={() => push(`/$/${PAGES.REPOST_NEW}?to=${name}`)}
+                        label={__('Repost')}
+                      />
+                    ),
+                    publish: <Button button="link" onClick={() => beginPublish(name)} label={'publish'} />,
+                    name: <strong>name</strong>,
+                  }}
+                >
+                  You have found the edge of the internet. %repost% or %publish% your stuff here to claim this spot.
+                </I18nMessage>
+              }
+            />
           </div>
         )}
         {!hideLink && winningUri && (
