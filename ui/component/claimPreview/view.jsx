@@ -22,6 +22,9 @@ import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import FileDownloadLink from 'component/fileDownloadLink';
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 import PublishPending from 'component/publishPending';
+import ClaimPreviewLoading from './claim-preview-loading';
+import ClaimPreviewNoMature from './claim-preview-no-mature';
+import ClaimPreviewNoContent from './claim-preview-no-content';
 
 type Props = {
   uri: string,
@@ -201,71 +204,16 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     return null;
   }
 
-  const claimPreviewLoading = (
-    <li
-      disabled
-      className={classnames('claim-preview__wrapper', {
-        'claim-preview__wrapper--channel': isChannel && type !== 'inline',
-        'claim-preview__wrapper--inline': type === 'inline',
-      })}
-    >
-      <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
-        <div className="placeholder media__thumb" />
-        <div className="placeholder__wrapper">
-          <div className="placeholder claim-preview__title" />
-          <div className="placeholder media__subtitle" />
-        </div>
-      </div>
-    </li>
-  );
-
-  const claimPreviewNoContent = (
-    <li
-      disabled
-      className={classnames('claim-preview__wrapper', {
-        'claim-preview__wrapper--channel': isChannel && type !== 'inline',
-        'claim-preview__wrapper--inline': type === 'inline',
-      })}
-    >
-      <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
-        <div className={'claim-preview__null-label empty'}>{__('* space crickets *')}</div>
-      </div>
-    </li>
-  );
-
-  const claimPreviewNoMature = (
-    <li
-      disabled
-      className={classnames('claim-preview__wrapper', {
-        'claim-preview__wrapper--channel': isChannel && type !== 'inline',
-        'claim-preview__wrapper--inline': type === 'inline',
-      })}
-    >
-      <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
-        <div className="media__thumb" />
-
-        <div className="section__subtitle">{__('Mature content hidden by your preferences')}</div>
-      </div>
-    </li>
-  );
-
-  if (
-    placeholder === 'loading' &&
-    claim === undefined &&
-    shouldHide &&
-    showNullPlaceholder &&
-    isResolvingUri &&
-    !claim
-  ) {
-    return claimPreviewLoading;
+  if (placeholder === 'loading' || claim === undefined || (isResolvingUri && !claim)) {
+    return <ClaimPreviewLoading isChannel={isChannel} type={type} />;
   }
 
   if (claim && showNullPlaceholder && shouldHide && nsfw) {
-    return claimPreviewNoMature;
+    return <ClaimPreviewNoMature isChannel={isChannel} type={type} />;
   }
 
   if (!claim && showNullPlaceholder) {
-    return claimPreviewNoContent;
+    return <ClaimPreviewNoContent isChannel={isChannel} type={type} />;
   }
 
   if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && claim === null) {

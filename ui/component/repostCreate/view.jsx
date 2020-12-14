@@ -187,7 +187,12 @@ function RepostCreate(props: Props) {
       <Card
         actions={
           <div>
-            {name && (
+            {uri && (
+              <fieldset-section>
+                <ClaimPreview key={uri} uri={uri} actions={''} type={'inline'} showNullPlaceholder />
+              </fieldset-section>
+            )}
+            {!uri && name && (
               <>
                 <FormField
                   label={'Content to repost'}
@@ -200,20 +205,16 @@ function RepostCreate(props: Props) {
                 />
               </>
             )}
-            <fieldset-section>
-              {(uri || contentUri) && (
-                <ClaimPreview
-                  key={uri || contentUri}
-                  uri={uri || contentUri}
-                  actions={''}
-                  type={'large'}
-                  showNullPlaceholder
-                />
-              )}
-              {!uri && !contentUri && (
-                <ClaimPreview actions={''} type={'large'} placeholder={'loading'} showNullPlaceholder />
-              )}
-            </fieldset-section>
+            {!uri && (
+              <fieldset-section>
+                {contentUri && (
+                  <ClaimPreview key={contentUri} uri={contentUri} actions={''} type={'large'} showNullPlaceholder />
+                )}
+                {!contentUri && (
+                  <ClaimPreview actions={''} type={'large'} placeholder={'loading'} showNullPlaceholder />
+                )}
+              </fieldset-section>
+            )}
 
             <React.Fragment>
               <fieldset-section>
@@ -264,7 +265,7 @@ function RepostCreate(props: Props) {
             <div className="section__actions">
               <Button
                 icon={ICONS.REPOST}
-                disabled={reposting || repostBidError || repostNameError}
+                disabled={resolvingRepost || reposting || repostBidError || repostNameError}
                 button="primary"
                 label={reposting ? __('Reposting') : __('Repost')}
                 onClick={handleSubmit}
