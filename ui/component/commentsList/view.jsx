@@ -59,7 +59,7 @@ function CommentList(props: Props) {
     Boolean(reactionsById) || !ENABLE_COMMENT_REACTIONS
   );
   const linkedCommentId = linkedComment && linkedComment.comment_id;
-  const hasNoComments = totalComments === 0;
+  const hasNoComments = !totalComments;
   const moreBelow = totalComments - end > 0;
   const isMyComment = (channelId: string): boolean => {
     if (myChannels != null && channelId != null) {
@@ -215,9 +215,9 @@ function CommentList(props: Props) {
             <div className="empty main-empty">
               <Yrbl
                 type="happy"
-                title={__('First!')}
+                title={__('Hmmm')}
                 small
-                subtitle={__('Be the first to say something insightful.')}
+                subtitle={__('My favorite was the part where he said the thing that time. What do you think?')}
               />
             </div>
           )}
